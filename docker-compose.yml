@@ -1,0 +1,76 @@
+name: omnilink-app
+services:
+  # BACKEND: FastAPI (Python)
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - RAWG_API_KEY=${RAWG_API_KEY}
+      - DATABASE_URL=mysql+pymysql://${DB_USER}:${DB_PASSWORD}@db/${DB_NAME}
+    depends_on:
+      - db
+
+  # FRONTEND: React (Vite/TypeScript)
+  frontend:
+    build: ./frontend
+    ports:
+      - "8001:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # Evita conflictos de dependencias entre OS y Docker
+    environment:
+      - VITE_API_URL=http://localhost:8000
+
+  # BASE DE DATOS: MySQL
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./db:/var/lib/mysql
+  
+  # PANEL DE CONTROL SQL: phpMyAdmin
+  sql-admin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8082:80" # Usamos el 8082 para no chocar con Mongo Express (8081)
+    environment:
+      PMA_HOST: db # Nombre del servicio de MySQL en tu docker-compose
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    depends_on:
+      - db
+
+  nosql-db:
+    image: mongo:6.0
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb:/data/db
+  
+  mongo-express:
+    image: mongo-express
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@nosql-db:27017/
+
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_USER}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "8081:8081"
+    depends_on:
+      - nosql-db
