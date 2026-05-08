@@ -1,0 +1,27 @@
+# --- ENTORNO ---
+.env
+*.env
+
+# --- BASES DE DATOS ---
+db/
+mongodb/
+
+# --- FRONTEND ---
+frontend/node_modules/
+frontend/dist/
+frontend/.eslintcache
+frontend/*.log
+
+# --- BACKEND ---
+backend/__pycache__/
+backend/*.pyc
+backend/.pytest_cache
+backend/.app.db
+
+# --- DOCKER ---
+*.log
+.docker_temp/
+
+# --- SISTEMA ---
+.DS_Store
+Thumbs.db
