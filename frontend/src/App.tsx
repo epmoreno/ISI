@@ -11,6 +11,7 @@ function App() {
   // 2. useEffect hace la llamada a la API. 
   // El array [page] al final indica que esto se volverá a ejecutar cada vez que cambie de página.
   useEffect(() => {
+    // Se recoge los juegos a traves de de la api y se almacenan en games con setGames()
     const fetchGames = async () => {
       setLoading(true)
       setError(null)
@@ -39,7 +40,7 @@ function App() {
     }
 
     fetchGames()
-  }, [page]) // <--- Importante: Dependencia de la página
+  }, [page]) 
 
   return (
     <div className="container mt-4">
