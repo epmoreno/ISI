@@ -40,6 +40,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ./db:/var/lib/mysql
+      - ./script-sql.sql:/docker-entrypoint-initdb.d/script-sql.sql
   
   # PANEL DE CONTROL SQL: phpMyAdmin
   sql-admin:
