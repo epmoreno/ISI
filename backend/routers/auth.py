@@ -18,7 +18,7 @@ async def obtener_usuario_actual(authorization: str = Header(...), db: Session =
         raise HTTPException(status_code=401, detail="Token expirado o inválido")
     
     # Busca el usuario en MySQL por su uid de Firebase
-    usuario = db.query(Usuario).filter(Usuario.firebase_uid == datos_token["uid"]).first()
+    usuario = db.query(Usuarios).filter(Usuarios.firebase_uid == datos_token["uid"]).first()
     
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
@@ -38,14 +38,15 @@ async def iniciar_sesion(authorization: str = Header(...), db: Session = Depends
         raise HTTPException(status_code=401, detail="Token expirado o inválido")
     
     # Busca si ya existe el usuario en MySQL
-    usuario = db.query(Usuario).filter(Usuario.firebase_uid == datos_token["uid"]).first()
+    usuario = db.query(Usuarios).filter(Usuarios.firebase_uid == datos_token["uid"]).first()
     
     # Si no existe lo crea automáticamente
     if not usuario:
-        usuario = Usuario(
+        usuario = Usuarios(
             firebase_uid=datos_token["uid"],
             email=datos_token.get("email", ""),
             username=datos_token.get("email", "").split("@")[0],
+            password="",
             rol="jugador"
         )
         db.add(usuario)

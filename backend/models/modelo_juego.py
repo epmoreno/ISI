@@ -16,4 +16,4 @@ class Juego(Document):
     cached_at:    datetime = Field(default_factory=datetime.utcnow)  # Fecha de caché
 
     class Settings:
-        name = "juegos"                  # Nombre de la colección en MongoDB
+        name = "juegos"                  # Nombre de la colección en MongoDB  
