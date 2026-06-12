@@ -1,0 +1,40 @@
+{
+  "_id": "ObjectId",
+  "slug": "the-witcher-3-wild-hunt",
+  "nombre": "The Witcher 3: Wild Hunt",
+  "detalles": {
+    "descripcion": "An open world RPG...",
+    "metacritica": 92,
+    "rating_comunidad": 4.67,
+    "playtime": 46,
+    "web_oficial": "https://thewitcher.com"
+  },
+  "imagenes": [
+    "https://imagen1.jpg",
+    "https://imagen2.jpg"
+  ],
+
+  "generos": ["Action", "RPG", "Adventure"],
+  "plataformas": [
+    {
+      "nombre": "PC",
+      "año_salida": "2015-05-19",
+      "url_oficial": "https://www.thewitcher.com/us/en/witcher3"
+    },
+    {
+      "nombre": "PlayStation 4",
+      "año_salida": "2015-05-19",
+      "url_oficial": "https://www.playstation.com/es-es/games/the-witcher-3-wild-hunt/"
+    },
+    {
+      "nombre": "PlayStation 5",
+      "año_salida": "2022-12-14",
+      "url_oficial": "https://www.playstation.com/es-es/games/the-witcher-3-wild-hunt/"
+    }
+  ],
+  "developer": {
+    "nombre": "CD PROJEKT RED",
+    "logo_url": "https://logo.png",
+    "numero_juegos": 25
+  }
+}
