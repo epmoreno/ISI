@@ -7,6 +7,7 @@ function Inicio() {
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [busqueda, setBusqueda] = useState('')
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -15,16 +16,16 @@ function Inicio() {
       
       try {
         const apikey = "95252892507c4c7ca20417bfcead9e8a"
-        const apiurl = `https://api.rawg.io/api/games?key=${apikey}&page=${page}&page_size=20`
-        const response = await fetch(apiurl)
+        let apiurl = `https://api.rawg.io/api/games?key=${apikey}&page=${page}&page_size=20`
         
-        if (!response.ok) {
-          throw new Error(`Error: API request failed with status code ${response.status}`)
+        if (busqueda.trim()) {
+          apiurl += `&search=${encodeURIComponent(busqueda)}`
         }
         
+        const response = await fetch(apiurl)
+        if (!response.ok) throw new Error(`Error: ${response.status}`)
         const data = await response.json()
         setGames(data.results)
-        
       } catch (err: any) {
         setError(err.message)
       } finally {
@@ -33,11 +34,21 @@ function Inicio() {
     }
 
     fetchGames()
-  }, [page])
+  }, [page, busqueda])
 
   return (
     <div className="container mt-4">
       <h1 className="text-center mb-4">Catálogo - Página {page}</h1>
+
+      <div className="mb-4">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Buscar juego..."
+          value={busqueda}
+          onChange={e => setBusqueda(e.target.value)}
+        />
+      </div>
 
       {error && <div className="alert alert-danger">{error}</div>}
 

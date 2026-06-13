@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { auth } from '../firebase'
 
 function DetalleJuego() {
   const { id } = useParams()
@@ -53,6 +54,21 @@ function DetalleJuego() {
           <p><strong>Fecha de lanzamiento:</strong> {juego.released || 'Desconocida'}</p>
           <p><strong>Géneros:</strong> {juego.genres?.map((g: any) => g.name).join(', ') || 'Desconocido'}</p>
           <p><strong>Plataformas:</strong> {juego.platforms?.map((p: any) => p.platform.name).join(', ') || 'Desconocida'}</p>
+          <button
+            className="btn btn-success mt-2 me-2"
+            onClick={async () => {
+              const usuario = auth.currentUser
+              if (!usuario) return
+              const token = await usuario.getIdToken()
+              await fetch(`http://localhost:8000/biblioteca/agregar/${id}`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` }
+              })
+              alert('Juego agregado a tu biblioteca')
+            }}
+          >
+            ➕ Añadir a biblioteca
+          </button>
           <p className="mt-3">{juego.description_raw?.slice(0, 300)}...</p>
           {juego.website && (
             <a href={juego.website} target="_blank" rel="noopener noreferrer" className="btn btn-primary mt-2">
