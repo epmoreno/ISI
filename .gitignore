@@ -29,4 +29,4 @@ Thumbs.db
 
 
 # --- SCRIPT SQL ---
-script-sql.sql
+*.sql
