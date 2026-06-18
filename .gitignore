@@ -26,3 +26,7 @@ backend/.app.db
 # --- SISTEMA ---
 .DS_Store
 Thumbs.db
+
+
+# --- SCRIPT SQL ---
+script-sql.sql
