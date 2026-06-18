@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from db.mongo import conectar_mongo, cerrar_mongo
 from core.firebase import inicializar_firebase
 from routers.auth import router as auth_router
+from routers.biblioteca import router as biblioteca_router
 import httpx
 import os
 
@@ -15,7 +16,6 @@ async def lifespan(app: FastAPI):
     await cerrar_mongo()
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(auth_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,6 +24,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth_router)
+app.include_router(biblioteca_router)
 
 API_KEY = os.getenv("RAWG_API_KEY")
 
