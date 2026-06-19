@@ -16,6 +16,7 @@ function Navbar() {
       <div className="d-flex gap-3 align-items-center">
         <Link to="/inicio" className="text-white text-decoration-none">Catálogo</Link>
         <Link to="/biblioteca" className="text-white text-decoration-none">Mi Biblioteca</Link>
+        <Link className="nav-link text-warning" to="/dashboard"><i className="fas fa-lock me-1"></i> Panel de Control</Link>
         <button className="btn btn-outline-light btn-sm" onClick={cerrarSesion}>
           Cerrar sesión
         </button>
