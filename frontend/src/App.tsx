@@ -4,7 +4,8 @@ import Inicio from './pages/inicio'
 import DetalleJuego from './pages/detalle_juego'
 import Biblioteca from './pages/biblioteca'
 import Navbar from './components/navbar'
-import RutaProtegida from './components/rutaprotegida'
+import RutaProtegida from './components/ruta_protegida'
+import Dashboard from './pages/dashboard'
 
 function App() {
   return (
@@ -25,6 +26,11 @@ function App() {
         <Route path="/biblioteca" element={
           <RutaProtegida>
             <Biblioteca />
+          </RutaProtegida>
+        } />
+        <Route path="/dashboard" element={
+          <RutaProtegida>
+            <Dashboard />
           </RutaProtegida>
         } />
       </Routes>
