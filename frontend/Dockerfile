@@ -8,7 +8,7 @@ COPY package*.json ./
 
 # Instalamos las dependencias
 RUN npm install
-RUN npm install bootstrap react-router-dom firebase
+RUN npm install bootstrap react-router-dom firebase bootswatch
 RUN npm install recharts
 
 # Copiamos el resto del proyecto

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Login from './pages/login'
 import Inicio from './pages/inicio'
 import DetalleJuego from './pages/detalle_juego'
@@ -7,10 +7,11 @@ import Navbar from './components/navbar'
 import RutaProtegida from './components/ruta_protegida'
 import Dashboard from './pages/dashboard'
 
-function App() {
+function Layout() {
+  const location = useLocation()
   return (
-    <BrowserRouter>
-      <Navbar />
+    <>
+      {location.pathname !== '/' && <Navbar />}
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/inicio" element={
@@ -34,8 +35,17 @@ function App() {
           </RutaProtegida>
         } />
       </Routes>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Layout />
     </BrowserRouter>
   )
 }
+
 
 export default App

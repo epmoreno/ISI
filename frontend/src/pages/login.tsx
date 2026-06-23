@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { auth } from '../firebase'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
-import '../App.css'
+import '../styles/login.css'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -48,51 +48,56 @@ function Login() {
   }
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center w-100"
-      style={{ minHeight: 'calc(100vh - 56px)' }}
-    >
-      <div className="card p-4 shadow" style={{ width: '400px' }}>
-        <h2 className="text-center mb-4">OmniLink</h2>
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-logo">
+          <svg width="40" height="40" viewBox="0 0 28 28" fill="none">
+            <rect x="2" y="8" width="14" height="7" rx="3.5" stroke="#ffffff" strokeWidth="2.2" fill="none"/>
+            <rect x="12" y="13" width="14" height="7" rx="3.5" stroke="#ffffff" strokeWidth="2.2" fill="none"/>
+            <line x1="9" y1="14" x2="19" y2="16" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round"/>
+            <circle cx="5" cy="22" r="1.2" fill="#2563eb"/>
+            <circle cx="23" cy="6" r="1.2" fill="#2563eb"/>
+          </svg>
+          <h1 className="login-titulo">OmniLink</h1>
+          <p className="login-subtitulo">Tu catálogo de videojuegos</p>
+        </div>
 
-        {error && <div className="alert alert-danger">{error}</div>}
+        {error && <div className="login-error">{error}</div>}
 
-        <div className="mb-3">
-          <label className="form-label">Correo electrónico</label>
+        <div className="login-field">
+          <label className="login-label">Correo electrónico</label>
           <input
             type="email"
-            className="form-control"
+            className="login-input"
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="correo@ejemplo.com"
           />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Contraseña</label>
+        <div className="login-field">
+          <label className="login-label">Contraseña</label>
           <input
             type="password"
-            className="form-control"
+            className="login-input"
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder="••••••••"
           />
         </div>
 
-        <button
-          className="btn btn-primary w-100 mb-2"
-          onClick={manejarLogin}
-          disabled={cargando}
-        >
+        <button className="login-btn-primary" onClick={manejarLogin} disabled={cargando}>
           {cargando ? 'Cargando...' : 'Iniciar sesión'}
         </button>
 
-        <button
-          className="btn btn-outline-secondary w-100"
-          onClick={manejarRegistro}
-          disabled={cargando}
-        >
-          Registrarse
+        <div className="login-divisor">
+          <div className="login-divisor-linea" />
+          <span className="login-divisor-texto">o</span>
+          <div className="login-divisor-linea" />
+        </div>
+
+        <button className="login-btn-secondary" onClick={manejarRegistro} disabled={cargando}>
+          Crear cuenta
         </button>
       </div>
     </div>

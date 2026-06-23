@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { auth } from '../firebase'
+import '../styles/detalle.css'
 
 function DetalleJuego() {
   const { id } = useParams()
@@ -10,12 +11,14 @@ function DetalleJuego() {
   const [error, setError] = useState<string | null>(null)
   const [screenshots, setScreenshots] = useState<any[]>([])
   const [trailers, setTrailers] = useState<any[]>([])
+  const [imagenActual, setImagenActual] = useState(0)
+  const [añadido, setAñadido] = useState(false)
+  const [enBiblioteca, setEnBiblioteca] = useState(false)
 
   useEffect(() => {
     const fetchJuego = async () => {
       try {
         const apikey = "95252892507c4c7ca20417bfcead9e8a"
-
         const response = await fetch(`https://api.rawg.io/api/games/${id}?key=${apikey}`)
         if (!response.ok) throw new Error('Error al cargar el juego')
         const data = await response.json()
@@ -29,6 +32,16 @@ function DetalleJuego() {
         const trailersData = await trailersRes.json()
         setTrailers(trailersData.results || [])
 
+        const token = await auth.currentUser?.getIdToken()
+        if (token) {
+          const bibRes = await fetch('http://localhost:8000/biblioteca/', {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+          const bibData = await bibRes.json()
+          const yaEsta = bibData.juegos.some((j: any) => j.rawg_juego_id === parseInt(id || '0'))
+          setEnBiblioteca(yaEsta)
+        }
+
       } catch (err: any) {
         setError(err.message)
       } finally {
@@ -39,100 +52,128 @@ function DetalleJuego() {
   }, [id])
 
   if (loading) return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="spinner-border text-primary" role="status" />
+    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: '36px', height: '36px', border: '3px solid #1f1f1f', borderTopColor: '#2563eb', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
     </div>
   )
 
-  if (error) return <div className="container mt-4"><div className="alert alert-danger">{error}</div></div>
+  if (error) return (
+    <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', padding: '32px 24px' }}>
+      <div style={{ backgroundColor: '#1a0a0a', border: '1px solid #3f1f1f', borderRadius: '8px', padding: '12px 16px', color: '#f87171' }}>{error}</div>
+    </div>
+  )
 
-  // Todas las imágenes: imagen principal + screenshots
-  const todasLasImagenes = [
-    juego.background_image,
-    ...screenshots.map((s: any) => s.image)
-  ].filter(Boolean)
+  const todasLasImagenes = [juego.background_image, ...screenshots.map((s: any) => s.image)].filter(Boolean)
 
   return (
-    <div className="container mt-4">
-      <button className="btn btn-secondary mb-3" onClick={() => navigate('/inicio')}>
-        ← Volver al catálogo
-      </button>
+    <div className="detalle-page">
+      <div className="detalle-container">
 
-      <div className="row">
-        {/* Carrusel solo con imágenes */}
-        <div className="col-md-6">
-          <div id="carruselJuego" className="carousel slide mb-3" data-bs-ride="carousel">
-            <div className="carousel-inner rounded shadow">
-              {todasLasImagenes.map((img, index) => (
-                <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
-                  <img
-                    src={img}
-                    className="d-block w-100 rounded"
-                    style={{ maxHeight: '320px', objectFit: 'cover' }}
-                    alt={`Imagen ${index + 1}`}
-                  />
-                </div>
-              ))}
+        <button className="detalle-btn-volver" onClick={() => navigate('/inicio')}>
+          ← Volver al catálogo
+        </button>
+
+        <div className="detalle-grid">
+          {/* Columna izquierda */}
+          <div>
+            <div className="detalle-imagen-principal">
+              <img src={todasLasImagenes[imagenActual] || ''} alt={juego.name} />
+              {todasLasImagenes.length > 1 && (
+                <>
+                  <button className="detalle-carousel-btn detalle-carousel-btn-prev" onClick={() => setImagenActual(i => Math.max(0, i - 1))}>‹</button>
+                  <button className="detalle-carousel-btn detalle-carousel-btn-next" onClick={() => setImagenActual(i => Math.min(todasLasImagenes.length - 1, i + 1))}>›</button>
+                </>
+              )}
             </div>
+
             {todasLasImagenes.length > 1 && (
-              <>
-                <button className="carousel-control-prev" type="button" data-bs-target="#carruselJuego" data-bs-slide="prev">
-                  <span className="carousel-control-prev-icon" />
-                </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#carruselJuego" data-bs-slide="next">
-                  <span className="carousel-control-next-icon" />
-                </button>
-              </>
+              <div className="detalle-miniaturas">
+                {todasLasImagenes.slice(0, 6).map((img, i) => (
+                  <img
+                    key={i}
+                    src={img}
+                    onClick={() => setImagenActual(i)}
+                    alt=""
+                    className={`detalle-miniatura ${imagenActual === i ? 'activa' : 'inactiva'}`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {trailers.length > 0 && (
+              <div className="detalle-trailers">
+                <p className="detalle-trailers-label">Trailers</p>
+                <div className="detalle-trailers-lista">
+                  {trailers.map((trailer: any) => (
+                    <a key={trailer.id} href={trailer.data?.max || trailer.data?.['480']} target="_blank" rel="noopener noreferrer" className="detalle-trailer-link">
+                      ▶ {trailer.name || 'Ver trailer'}
+                    </a>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
 
-          {/* Trailers como enlaces externos */}
-          {trailers.length > 0 && (
-            <div className="mt-2">
-              <h6>Trailers:</h6>
-              {trailers.map((trailer: any) => (
-                <a
-                  key={trailer.id}
-                  href={trailer.data?.max || trailer.data?.['480']}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline-info btn-sm me-2 mb-2"
-                >
-                  ▶ {trailer.name || 'Ver trailer'}
-                </a>
+          {/* Columna derecha */}
+          <div>
+            <h1 className="detalle-titulo">{juego.name}</h1>
+
+            {juego.metacritic && (
+              <span className={`detalle-metacritic ${juego.metacritic >= 80 ? 'detalle-metacritic-verde' : juego.metacritic >= 60 ? 'detalle-metacritic-amarillo' : 'detalle-metacritic-rojo'}`}>
+                Metacritic {juego.metacritic}
+              </span>
+            )}
+
+            <div className="detalle-datos">
+              {[
+                { label: 'Lanzamiento', value: juego.released || 'Desconocida' },
+                { label: 'Géneros', value: juego.genres?.map((g: any) => g.name).join(', ') || 'Desconocido' },
+                { label: 'Plataformas', value: juego.platforms?.map((p: any) => p.platform.name).join(', ') || 'Desconocida' },
+              ].map(({ label, value }) => (
+                <div key={label} className="detalle-dato">
+                  <span className="detalle-dato-label">{label}</span>
+                  <span className="detalle-dato-valor">{value}</span>
+                </div>
               ))}
             </div>
-          )}
-        </div>
 
-        {/* Info del juego */}
-        <div className="col-md-6">
-          <h1>{juego.name}</h1>
-          <p><span className="badge bg-warning text-dark">Metacritic: {juego.metacritic || 'N/A'}</span></p>
-          <p><strong>Fecha de lanzamiento:</strong> {juego.released || 'Desconocida'}</p>
-          <p><strong>Géneros:</strong> {juego.genres?.map((g: any) => g.name).join(', ') || 'Desconocido'}</p>
-          <p><strong>Plataformas:</strong> {juego.platforms?.map((p: any) => p.platform.name).join(', ') || 'Desconocida'}</p>
-          <button
-            className="btn btn-success mt-2 me-2"
-            onClick={async () => {
-              const usuario = auth.currentUser
-              if (!usuario) return
-              const token = await usuario.getIdToken()
-              await fetch(`http://localhost:8000/biblioteca/agregar/${id}`, {
-                method: 'POST',
-                headers: { Authorization: `Bearer ${token}` }
-              })
-              alert('Juego agregado a tu biblioteca')
-            }}
-          >
-            ➕ Añadir a biblioteca
-          </button>
-          <p className="mt-3">{juego.description_raw?.slice(0, 300)}...</p>
-          {juego.website && (
-            <a href={juego.website} target="_blank" rel="noopener noreferrer" className="btn btn-primary mt-2">
-              🌐 Página oficial
-            </a>
-          )}
+            <p className="detalle-descripcion">
+              {(() => {
+                const desc = juego.description_raw || ''
+                const corte = desc.indexOf('Español')
+                return corte > 0 ? desc.slice(corte + 'Español'.length).trim() : desc
+              })()}
+            </p>
+
+            <div className="detalle-botones">
+              <button
+                className={`detalle-btn-biblioteca ${enBiblioteca ? 'añadido' : 'añadir'}`}
+                onClick={async () => {
+                  if (enBiblioteca) return
+                  const usuario = auth.currentUser
+                  if (!usuario) return
+                  const token = await usuario.getIdToken()
+                  await fetch(`http://localhost:8000/biblioteca/agregar/${id}`, {
+                    method: 'POST',
+                    headers: { Authorization: `Bearer ${token}` }
+                  })
+                  setEnBiblioteca(true)
+                  setAñadido(true)
+                  setTimeout(() => setAñadido(false), 2500)
+                }}
+                disabled={enBiblioteca}
+              >
+                {enBiblioteca ? '✓ Ya en biblioteca' : añadido ? '✓ Añadido' : '+ Añadir a biblioteca'}
+              </button>
+
+              {juego.website && (
+                <a href={juego.website} target="_blank" rel="noopener noreferrer" className="detalle-btn-web">
+                  🌐 Página oficial
+                </a>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

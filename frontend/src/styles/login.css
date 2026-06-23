@@ -1,0 +1,128 @@
+.login-page {
+  min-height: 100vh;
+  background-color: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  width: 400px;
+  background-color: #111111;
+  border: 1px solid #1f1f1f;
+  border-radius: 12px;
+  padding: 40px;
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.login-titulo {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 12px 0 6px;
+}
+
+.login-subtitulo {
+  color: #666666;
+  font-size: 14px;
+}
+
+.login-error {
+  background-color: #1a0a0a;
+  border: 1px solid #3f1f1f;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  color: #f87171;
+  font-size: 14px;
+}
+
+.login-label {
+  color: #999999;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.login-input {
+  width: 100%;
+  background-color: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.login-input:focus {
+  border-color: #2563eb;
+}
+
+.login-field {
+  margin-bottom: 16px;
+}
+
+.login-field:last-of-type {
+  margin-bottom: 24px;
+}
+
+.login-btn-primary {
+  width: 100%;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-bottom: 10px;
+}
+
+.login-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-divisor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.login-divisor-linea {
+  flex: 1;
+  height: 1px;
+  background-color: #1f1f1f;
+}
+
+.login-divisor-texto {
+  color: #444444;
+  font-size: 12px;
+}
+
+.login-btn-secondary {
+  width: 100%;
+  background-color: transparent;
+  color: #999999;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.login-btn-secondary:hover {
+  border-color: #444444;
+  color: #ffffff;
+}

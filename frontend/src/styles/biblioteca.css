@@ -1,0 +1,171 @@
+.biblioteca-page {
+  background-color: #0a0a0a;
+  min-height: 100vh;
+  padding: 32px 24px;
+}
+
+.biblioteca-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.biblioteca-header {
+  margin-bottom: 28px;
+}
+
+.biblioteca-titulo {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.biblioteca-subtitulo {
+  color: #666666;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.biblioteca-error {
+  background-color: #1a0a0a;
+  border: 1px solid #3f1f1f;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #f87171;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.biblioteca-vacia {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.biblioteca-vacia-emoji {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.biblioteca-vacia-texto {
+  color: #555555;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.biblioteca-btn-explorar {
+  background-color: #2563eb;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.biblioteca-btn-explorar:hover {
+  opacity: 0.85;
+}
+
+.biblioteca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.biblioteca-card {
+  background-color: #111111;
+  border: 1px solid #1f1f1f;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.biblioteca-card:hover {
+  border-color: #2a2a2a;
+}
+
+.biblioteca-card-link {
+  text-decoration: none;
+  display: block;
+}
+
+.biblioteca-card-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+.biblioteca-card-body {
+  padding: 14px 14px 10px;
+}
+
+.biblioteca-card-titulo {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 8px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.biblioteca-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.biblioteca-card-genero {
+  color: #555555;
+  font-size: 12px;
+}
+
+.biblioteca-metacritic-verde {
+  background-color: #14532d;
+  color: #4ade80;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.biblioteca-metacritic-amarillo {
+  background-color: #713f12;
+  color: #fbbf24;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.biblioteca-metacritic-rojo {
+  background-color: #450a0a;
+  color: #f87171;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.biblioteca-card-actions {
+  padding: 0 14px 14px;
+}
+
+.biblioteca-btn-eliminar {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  padding: 7px;
+  color: #666666;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.biblioteca-btn-eliminar:hover {
+  border-color: #f87171;
+  color: #f87171;
+}
